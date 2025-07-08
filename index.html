@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accès protégé – version responsive</title>
+  <style>
+    /* RESET & BASE -------------------------------------------------------*/
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#000;min-height:100vh;display:flex;align-items:center;justify-content:center;cursor:none;overflow:hidden}
+    body.content-active{cursor:default;overflow-y:auto;display:block}
+
+    /* CURSEUR GLOW -------------------------------------------------------*/
+    .cursor-glow{position:fixed;width:100px;height:100px;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,255,255,.15)0%,rgba(255,255,255,.05)50%,transparent 70%);transition:all .05s ease}
+
+    /* LOGIN --------------------------------------------------------------*/
+    .container{background:rgba(10,10,10,.8);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:20px;box-shadow:0 0 50px rgba(255,255,255,.1);max-width:500px;width:90%;padding:80px 40px;text-align:center}
+    .input-wrapper{position:relative;display:inline-block;width:100%;max-width:350px}
+    .password-input{width:100%;padding:18px 52px 18px 18px;border:2px solid rgba(255,255,255,.3);border-radius:10px;font-size:16px;background:rgba(0,0,0,.5);color:#fff;text-align:center}
+    .password-input::placeholder{color:rgba(255,255,255,.6)}
+    .password-input:focus{outline:none;border-color:rgba(255,255,255,.7);box-shadow:0 0 30px rgba(255,255,255,.3);background:rgba(0,0,0,.7)}
+    .check-btn{position:absolute;top:50%;right:6px;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.1);color:#fff;font-size:18px;cursor:pointer;transition:.3s}
+    .check-btn:hover{background:rgba(255,255,255,.3)}
+    .error-message{color:#ff6b6b;margin-top:15px;display:none;text-shadow:0 0 10px rgba(255,107,107,.5)}
+
+    /* CONTENT ------------------------------------------------------------*/
+    .content-section{display:none;background:#000;width:100%;min-height:100vh;padding:clamp(20px,5vh,60px) 0}
+    .content-wrapper{display:flex;flex-direction:column;align-items:center;gap:clamp(20px,4vh,40px);max-width:1200px;width:100%;margin:0 auto}
+    .content-section h1{color:#fff;text-align:center;font-size:clamp(1.8rem,4vw,3rem);font-weight:600;text-shadow:0 0 20px rgba(255,255,255,.5);animation:glow 3s ease-in-out infinite alternate;padding:0 20px}
+    .text-content{line-height:1.8;color:#fff;background:rgba(255,255,255,.05);padding:clamp(15px,3vw,30px);border-radius:15px;box-shadow:0 0 30px rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);width:min(90vw,1200px)}
+    .text-content p{margin-bottom:1em;font-size:clamp(1rem,2.2vw,1.2rem)}
+
+    /* VIDEO --------------------------------------------------------------*/
+    .video-container{width:min(95vw,1200px);aspect-ratio:16/9;background:rgba(255,255,255,.05);border-radius:15px;overflow:hidden;box-shadow:0 0 30px rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1)}
+    @media(max-width:480px){.video-container{aspect-ratio:4/3}}
+    .video-container iframe{width:100%;height:100%;border:0}
+
+    /* BUTTON LOGOUT ------------------------------------------------------*/
+    .logout-btn{background:rgba(255,255,255,.1);color:#fff;border:2px solid rgba(255,255,255,.3);padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:500;transition:.3s;font-size:clamp(.9rem,2vw,1rem)}
+    .logout-btn:hover{background:rgba(255,255,255,.2);transform:translateY(-2px);box-shadow:0 0 20px rgba(255,255,255,.2)}
+
+    /* STARS --------------------------------------------------------------*/
+    .star,.shooting-star{position:absolute;border-radius:50%;background:#fff}
+    .star{width:2px;height:2px;animation:twinkle 2s infinite}
+    @keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:1;transform:scale(1)}}
+    .shooting-star{width:3px;height:3px;background:linear-gradient(45deg,#fff,transparent);animation:shoot 2s linear infinite}
+    @keyframes shoot{0%{transform:translate(-100px,-100px)rotate(45deg);opacity:0}10%,90%{opacity:1}100%{transform:translate(100vw,100vh)rotate(45deg);opacity:0}}
+  </style>
+</head>
+<body>
+  <!-- login -->
+  <div id="loginContainer" class="container">
+    <div class="input-wrapper">
+      <input type="password" id="passwordInput" class="password-input" placeholder="le lieu ou tout a basculé">
+      <button class="check-btn" onclick="checkPassword()" aria-label="Valider">✓</button>
+    </div>
+    <div id="errorMessage" class="error-message">Mot de passe incorrect</div>
+  </div>
+
+  <!-- content -->
+  <div id="contentSection" class="content-section">
+    <div class="content-wrapper">
+      <h1>Maxime → Eve</h1>
+      <div class="text-content">
+        <p>Chère Eve,</p>
+        <p>Depuis le premier instant où nos regards se sont croisés, j’ai su que quelque chose d’extraordinaire venait de commencer. Chaque jour à tes côtés est un cadeau inestimable, et je ne cesse d’être émerveillé par ta douceur, ta force et la lumière que tu apportes à ma vie.</p>
+        <p>Je t’aime plus que les mots ne sauraient le dire. Je promets de tout faire pour que ton sourire illumine toujours nos jours et que nos souvenirs brillent comme les étoiles qui veillent sur nous.</p>
+        <p>Pour toujours,</p>
+        <p><strong>Maxime</strong></p>
+      </div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/WCj0QXzyC-Y" allowfullscreen></iframe>
+      </div>
+      <button class="logout-btn" onclick="logout()">Se déconnecter</button>
+    </div>
+  </div>
+
+  <!-- Cursor glow -->
+  <div id="cursorGlow" class="cursor-glow"></div>
+
+  <script>
+    /* LISTE DE MOTS DE PASSE (insensibles à la casse) */
+    const passwords = [
+      "le concert de jok'air",
+      "ardentes 2024",
+      "jok'air",
+      "ardentes",
+      "jok'air au ardentes",
+      "festival avec jok'air",
+      "admin"
+    ].map(p=>p.toLowerCase());
+
+    /* CURSEUR LUMINEUX --------------------------------------------------*/
+    document.addEventListener('mousemove',e=>{
+      const c=document.getElementById('cursorGlow');
+      c.style.left=e.clientX+'px';
+      c.style.top =e.clientY+'px';
+    });
+
+    /* STAR GENERATION ---------------------------------------------------*/
+    function createStar(){
+      const s=document.createElement('div');
+      s.className='star';
+      s.style.left=Math.random()*100+'%';
+      s.style.top =Math.random()*100+'%';
+      s.style.animationDelay=Math.random()*2+'s';
+      s.style.animationDuration=(Math.random()*3+2)+'s';
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),5000);
+    }
+    function createShootingStar(){
+      const s=document.createElement('div');
+      s.className='shooting-star';
+      s.style.left=Math.random()*-100+'px';
+      s.style.top =Math.random()*-100+'px';
+      s.style.animationDelay=Math.random()*1+'s';
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),2000);
+    }
+    setInterval(createStar,300);
+    setInterval(()=>createShootingStar(),Math.random()*2000+1000);
+    for(let i=0;i<10;i++)setTimeout(createStar,i*100);
+    for(let i=0;i<3;i++)setTimeout(createShootingStar,i*1000);
+
+    /* AUTH --------------------------------------------------------------*/
+    function checkPassword(){
+      const entered = document.getElementById('passwordInput').value.trim().toLowerCase();
+      if(passwords.includes(entered)){
+        document.getElementById('loginContainer').style.display='none';
+        document.getElementById('contentSection').style.display='block';
+        document.getElementById('cursorGlow').style.display='none';
+        document.body.classList.add('content-active');
+      }else{
+        document.getElementById('errorMessage').style.display='block';
+        document.getElementById('passwordInput').value='';
+      }
+    }
+    function logout(){
+      document.getElementById('loginContainer').style.display='block';
+      document.getElementById('contentSection').style.display='none';
+      document.getElementById('cursorGlow').style.display='block';
+      document.body.classList.remove('content-active');
+      document.getElementById('passwordInput').value='';
+    }
+    document.getElementById('passwordInput').addEventListener('keypress',e=>{if(e.key==='Enter')checkPassword();});
+  </script>
+</body>
+</html>
